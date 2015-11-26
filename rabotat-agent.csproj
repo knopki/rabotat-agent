@@ -124,8 +124,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ILMergeOrder.txt" />
     <None Include="LICENSE" />
+    <Content Include="ILMergeOrder.txt" />
     <Content Include="README.ru.txt" />
     <None Include="Resources\AppIcon.ico" />
   </ItemGroup>
