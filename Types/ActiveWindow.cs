@@ -21,9 +21,6 @@ namespace RabotatAgent.Types
         [JsonProperty(PropertyName = "windowTitle", Required = Required.Always)]
         public string WindowTitle;
 
-        [JsonProperty(PropertyName = "moduleFileName", Required = Required.Default)]
-        public string ModuleFileName;
-
         [JsonProperty(PropertyName = "companyName", Required = Required.Default)]
         public string CompanyName;
 
