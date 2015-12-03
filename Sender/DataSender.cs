@@ -44,7 +44,12 @@ namespace RabotatAgent.Sender
             packet.HostName = Environment.MachineName.ToLower();
             packet.Windows = list;
             packet.Timestamp = DateTime.Now.ToUniversalTime();
-            packet.Hash = CalculateMD5Hash(packet.UserName + packet.DomainName + packet.HostName);
+            var str = packet.UserName +
+                packet.DomainName +
+                packet.HostName +
+                packet.Timestamp.ToString(@"yyyy-MM-dd HH:mm:ss") +
+                Settings.Secret;
+            packet.Hash = CalculateMD5Hash(str);
 
             return JsonConvert.SerializeObject(packet);
         }
@@ -76,7 +81,8 @@ namespace RabotatAgent.Sender
             {
                 Debug.WriteLine("List size: " + list.Count);
                 // не пора ли нам отправить данные?
-                if (list.Count >= Settings.MaxSendSize || DateTime.Now.ToUniversalTime() - lastSend >= maxDelay)
+                if (list.Count > 0 
+                    && (list.Count >= Settings.MaxSendSize || DateTime.Now.ToUniversalTime() - lastSend >= maxDelay))
                 {
                     Debug.WriteLine("Time to send datas");
                     if (SendData(list))
