@@ -82,7 +82,11 @@ namespace RabotatAgent.Collector
                 if (idle && prevWindow != null)
                 {
                     Debug.WriteLine("Enqueue previous because of idle");
-                    Queue.Enqueue(prevWindow);
+                    // убрать одномоментное
+                    if (prevWindow.From != prevWindow.To)
+                    {
+                        Queue.Enqueue(prevWindow);
+                    }
                     prevWindow = null;
                 }
                 // если предыдущего значения нет, то просто сохраняем его и идём дальше
@@ -104,7 +108,11 @@ namespace RabotatAgent.Collector
                     else
                     {
                         Debug.WriteLine("Enqueue previous and save current to previous");
-                        Queue.Enqueue(prevWindow);
+                        // убрать одномоментное
+                        if (prevWindow.From != prevWindow.To)
+                        {
+                            Queue.Enqueue(prevWindow);
+                        }
                         prevWindow = curWindow;
                     }
                 }
