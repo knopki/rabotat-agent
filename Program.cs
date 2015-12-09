@@ -4,6 +4,8 @@ using RabotatAgent.Sender;
 using RabotatAgent.Types;
 using System;
 using System.Collections.Concurrent;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace RabotatAgent
@@ -11,6 +13,7 @@ namespace RabotatAgent
     class Program
     {
         static private ConcurrentQueue<ActiveWindow> queue = null;
+        static private Mutex mutex;
 
         [STAThread]
         static void Main(string[] args)
@@ -41,6 +44,19 @@ namespace RabotatAgent
             {
                 MessageBox.Show("RabotatAgent: Необходимы аргументы --submit и --secret");
                 Environment.Exit(1);
+            }
+
+            // проверка на single instance
+            bool isFirstInstance;
+            String mutexName = string.Format(
+                CultureInfo.InvariantCulture,
+                "RabotatAgent~{0}~{1}~{2}~1ce0cd05-a6eb-4c9a-8562-64bb8ffe3838",
+                Environment.UserDomainName,
+                Environment.UserName,
+                (settings.Secret + settings.SubmitUrl).GetHashCode());
+            mutex = new Mutex(true, mutexName, out isFirstInstance);
+            if (!isFirstInstance) {
+                Environment.Exit(2);
             }
 
             // инициализировали очередь
